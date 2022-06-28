@@ -32,10 +32,9 @@ steps:
   inputs:
     ScriptType: 'InlineScript'
     Inline: |
-      env:${env:SRCCLR_API_SECRET}
           Set-ExecutionPolicy AllSigned -Scope Process -Force
           iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-          srcclr scan $(build.artifactStagingDirectory) --debug
+          srcclr scan example-dotnet/ --debug
  
 
 - task: VSTest@2
