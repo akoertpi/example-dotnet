@@ -20,6 +20,13 @@ steps:
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
+    
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    version: 3.1.402
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: VSBuild@1
   inputs:
