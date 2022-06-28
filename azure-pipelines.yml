@@ -36,7 +36,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Veracode SCA scan'
   #env: {SRCCLR_API_TOKEN: $(apiToken), DEBUG: "1"}
-  env: {SRCCLR_USE_DOTNET_EXEC: 'DOTNET'}
+  env: {SRCCLR_API_TOKEN: $(SRCCLR_API_TOKEN), SRCCLR_USE_DOTNET_EXEC: 'DOTNET'}
   inputs:
    targetType: 'inline'
    script: |
