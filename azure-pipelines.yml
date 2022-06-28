@@ -34,7 +34,7 @@ steps:
     Inline: |
           Set-ExecutionPolicy AllSigned -Scope Process -Force
           iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-          srcclr scan example-dotnet/ --debug
+          srcclr --debug scan
  
 
 - task: VSTest@2
