@@ -17,34 +17,30 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-    
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk'
-  inputs:
-    packageType: sdk
-    version: 3.1.402
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+#- task: NuGetCommand@2
+#  inputs:
+#    restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    
+#- task: VSBuild@1
+#  inputs:
+#    solution: '$(solution)'
+#    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
+
+#- task: VSTest@2
+#  inputs:
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
+
 - task: PowerShell@2
+  displayName: 'Veracode SCA scan'
+  #env: {SRCCLR_API_TOKEN: $(apiToken), DEBUG: "1"}
+  env: {SRCCLR_API_TOKEN: $(apiToken), SRCCLR_USE_DOTNET_EXEC: 'DOTNET'}
   inputs:
-    ScriptType: 'InlineScript'
-    Inline: |
-          Set-ExecutionPolicy AllSigned -Scope Process -Force
-          iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-          srcclr --debug scan
- 
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+   targetType: 'inline'
+   script: |
+    Set-ExecutionPolicy AllSigned -Scope Process -Force
+    $ProgressPreference = "SilentlyContinue"
+    iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+    srcclr scan $(Build.SourcesDirectory)
