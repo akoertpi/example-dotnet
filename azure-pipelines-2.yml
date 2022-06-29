@@ -21,6 +21,13 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
     
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    
 - task: PowerShell@2
   displayName: 'Veracode SCA scan'
   inputs:
@@ -31,12 +38,6 @@ steps:
     iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
     srcclr --debug scan $(Build.SourcesDirectory)
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
   inputs:
