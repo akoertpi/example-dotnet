@@ -1,7 +1,4 @@
 # ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
 trigger:
 - master
@@ -33,12 +30,24 @@ steps:
 #    platform: '$(buildPlatform)'
 #    configuration: '$(buildConfiguration)'
 
-- task: PowerShell@2
-  displayName: 'Veracode SCA scan'
+- task: Veracode@3
   inputs:
-   targetType: 'inline'
-   script: |
-    Set-ExecutionPolicy AllSigned -Scope Process -Force
-    $ProgressPreference = "SilentlyContinue"
-    iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
-    srcclr scan $(Build.SourcesDirectory)
+    ConnectionDetailsSelection: 'Endpoint'
+    veracodeAppProfile: '$(system.teamProject)'
+    version: '$(build.buildNumber)'
+    filepath: '$(build.artifactstagingdirectory)'
+    maximumWaitTime: '360'
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+
+#task: PowerShell@2
+  #displayName: 'Veracode SCA scan'
+  #inputs:
+   #targetType: 'inline'
+   #script: |
+    #Set-ExecutionPolicy AllSigned -Scope Process -Force
+    #$ProgressPreference = "SilentlyContinue"
+    #iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1'))
+    #srcclr scan $(Build.SourcesDirectory)
