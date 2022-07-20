@@ -33,7 +33,8 @@ steps:
 - task: Veracode@3
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
-    veracodeAppProfile: '$(system.teamProject)'
+    #veracodeAppProfile: '$(system.teamProject)'
+    veracodeAppProfile: 'Test'
     version: '$(build.buildNumber)'
     filepath: '$(build.artifactstagingdirectory)'
     maximumWaitTime: '360'
