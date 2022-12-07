@@ -4,7 +4,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'linux-latest'
 
 variables:
   solution: '**/*.sln'
@@ -42,6 +42,15 @@ steps:
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
+- task: gattjoe.VeracodeScaAdoExtension.custom-build-release-task.VeracodeCommunityScaAdoExtension@1
+  displayName: 'Veracode SCA Agent Scan - dotnet'
+  inputs:
+    scanType: url
+    scanTarget: 'https://github.com/srcclr/example-dotnet'
+    appName: dotnet
+    minCVSS: 0
+  env:
+    SRCCLR_API_TOKEN: $(SECRET)
 
 #task: PowerShell@2
   #displayName: 'Veracode SCA scan'
