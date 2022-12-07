@@ -28,6 +28,13 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+
+
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
 - task: gattjoe.VeracodeScaAdoExtension.custom-build-release-task.VeracodeCommunityScaAdoExtension@1
   displayName: 'Veracode SCA Agent Scan - dotnet'
   inputs:
@@ -37,8 +44,3 @@ steps:
     minCVSS: 0
   env:
     SRCCLR_API_TOKEN: $(SECRET)
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
